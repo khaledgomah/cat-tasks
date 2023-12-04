@@ -1,0 +1,429 @@
+
+DIO.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000018a  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         0000000a  00800060  0000018a  000001fe  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  00000208  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000238  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000080  00000000  00000000  00000274  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000a2f  00000000  00000000  000002f4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000069e  00000000  00000000  00000d23  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000768  00000000  00000000  000013c1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000000d8  00000000  00000000  00001b2c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000462  00000000  00000000  00001c04  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000007c1  00000000  00000000  00002066  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000060  00000000  00000000  00002827  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   8:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  10:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  14:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  18:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  1c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  20:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  24:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  28:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  2c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  30:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  34:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  38:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  3c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  40:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  44:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  48:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  4c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  50:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_copy_data>:
+  60:	10 e0       	ldi	r17, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	ea e8       	ldi	r30, 0x8A	; 138
+  68:	f1 e0       	ldi	r31, 0x01	; 1
+  6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
+  6c:	05 90       	lpm	r0, Z+
+  6e:	0d 92       	st	X+, r0
+  70:	aa 36       	cpi	r26, 0x6A	; 106
+  72:	b1 07       	cpc	r27, r17
+  74:	d9 f7       	brne	.-10     	; 0x6c <__do_copy_data+0xc>
+  76:	0e 94 82 00 	call	0x104	; 0x104 <main>
+  7a:	0c 94 c3 00 	jmp	0x186	; 0x186 <_exit>
+
+0000007e <__bad_interrupt>:
+  7e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000082 <DIO_enuInit>:
+#include  "DIO_config.h"
+#include  "DIO_priv.h"
+
+ES_t DIO_enuInit(void) {
+	ES_t Local_enuErrorState = ES_NOTOK;
+	DDRA = CONC(PA_PIN0_DIR, PA_PIN1_DIR, PA_PIN2_DIR, PA_PIN3_DIR, PA_PIN4_DIR,
+  82:	9f ef       	ldi	r25, 0xFF	; 255
+  84:	9a bb       	out	0x1a, r25	; 26
+	PA_PIN5_DIR, PA_PIN6_DIR, PA_PIN7_DIR);
+	DDRB = CONC(PB_PIN0_DIR, PB_PIN1_DIR, PB_PIN2_DIR, PB_PIN3_DIR, PB_PIN4_DIR,
+  86:	83 e5       	ldi	r24, 0x53	; 83
+  88:	87 bb       	out	0x17, r24	; 23
+	PB_PIN5_DIR, PB_PIN6_DIR, PB_PIN7_DIR);
+	DDRC = CONC(PC_PIN0_DIR, PC_PIN1_DIR, PC_PIN2_DIR, PC_PIN3_DIR, PC_PIN4_DIR,
+  8a:	94 bb       	out	0x14, r25	; 20
+	PC_PIN5_DIR, PC_PIN6_DIR, PC_PIN7_DIR);
+	DDRD = CONC(PD_PIN0_DIR, PD_PIN1_DIR, PD_PIN2_DIR, PD_PIN3_DIR, PD_PIN4_DIR,
+  8c:	81 bb       	out	0x11, r24	; 17
+	PD_PIN5_DIR, PD_PIN6_DIR, PD_PIN7_DIR);
+	PORTA = CONC(PA_PIN0_VAL, PA_PIN1_VAL, PA_PIN2_VAL, PA_PIN3_VAL,
+  8e:	85 e6       	ldi	r24, 0x65	; 101
+  90:	8b bb       	out	0x1b, r24	; 27
+	PA_PIN4_VAL, PA_PIN5_VAL, PA_PIN6_VAL, PA_PIN7_VAL);
+	PORTB = CONC(PB_PIN0_VAL, PB_PIN1_VAL, PB_PIN2_VAL, PB_PIN3_VAL,
+  92:	88 bb       	out	0x18, r24	; 24
+	PB_PIN4_VAL, PB_PIN5_VAL, PB_PIN6_VAL, PB_PIN7_VAL);
+	PORTC = CONC(PC_PIN0_VAL, PC_PIN1_VAL, PC_PIN2_VAL, PC_PIN3_VAL,
+  94:	15 ba       	out	0x15, r1	; 21
+	PC_PIN4_VAL, PC_PIN5_VAL, PC_PIN6_VAL, PC_PIN7_VAL);
+	PORTD = CONC(PD_PIN0_VAL, PD_PIN1_VAL, PD_PIN2_VAL, PD_PIN3_VAL,
+  96:	82 bb       	out	0x12, r24	; 18
+	PD_PIN4_VAL, PD_PIN5_VAL, PD_PIN6_VAL, PD_PIN7_VAL);
+	 Local_enuErrorState = ES_OK;
+
+	return Local_enuErrorState;
+}
+  98:	81 e0       	ldi	r24, 0x01	; 1
+  9a:	08 95       	ret
+
+0000009c <DIO_enuSetPortDirection>:
+
+ES_t DIO_enuSetPortDirection(u8 Copy_u8PortID, u8 Copy_u8Value) {
+	ES_t Local_enuErrorState = ES_NOTOK;
+	if (Copy_u8PortID <= DIO_PORTD) {
+  9c:	84 30       	cpi	r24, 0x04	; 4
+  9e:	a0 f4       	brcc	.+40     	; 0xc8 <DIO_enuSetPortDirection+0x2c>
+		switch (Copy_u8PortID) {
+  a0:	81 30       	cpi	r24, 0x01	; 1
+  a2:	49 f0       	breq	.+18     	; 0xb6 <DIO_enuSetPortDirection+0x1a>
+  a4:	28 f0       	brcs	.+10     	; 0xb0 <DIO_enuSetPortDirection+0x14>
+  a6:	82 30       	cpi	r24, 0x02	; 2
+  a8:	49 f0       	breq	.+18     	; 0xbc <DIO_enuSetPortDirection+0x20>
+  aa:	83 30       	cpi	r24, 0x03	; 3
+  ac:	51 f0       	breq	.+20     	; 0xc2 <DIO_enuSetPortDirection+0x26>
+  ae:	0e c0       	rjmp	.+28     	; 0xcc <DIO_enuSetPortDirection+0x30>
+			case DIO_PORTA:
+			DDRA = Copy_u8Value;
+  b0:	6a bb       	out	0x1a, r22	; 26
+			break;
+			case DIO_PORTD:
+			DDRD = Copy_u8Value;
+			break;
+		}
+		Local_enuErrorState = ES_OK;
+  b2:	81 e0       	ldi	r24, 0x01	; 1
+	ES_t Local_enuErrorState = ES_NOTOK;
+	if (Copy_u8PortID <= DIO_PORTD) {
+		switch (Copy_u8PortID) {
+			case DIO_PORTA:
+			DDRA = Copy_u8Value;
+			break;
+  b4:	08 95       	ret
+			case DIO_PORTB:
+			DDRB = Copy_u8Value;
+  b6:	67 bb       	out	0x17, r22	; 23
+			break;
+			case DIO_PORTD:
+			DDRD = Copy_u8Value;
+			break;
+		}
+		Local_enuErrorState = ES_OK;
+  b8:	81 e0       	ldi	r24, 0x01	; 1
+			case DIO_PORTA:
+			DDRA = Copy_u8Value;
+			break;
+			case DIO_PORTB:
+			DDRB = Copy_u8Value;
+			break;
+  ba:	08 95       	ret
+			case DIO_PORTC:
+			DDRC = Copy_u8Value;
+  bc:	64 bb       	out	0x14, r22	; 20
+			break;
+			case DIO_PORTD:
+			DDRD = Copy_u8Value;
+			break;
+		}
+		Local_enuErrorState = ES_OK;
+  be:	81 e0       	ldi	r24, 0x01	; 1
+			case DIO_PORTB:
+			DDRB = Copy_u8Value;
+			break;
+			case DIO_PORTC:
+			DDRC = Copy_u8Value;
+			break;
+  c0:	08 95       	ret
+			case DIO_PORTD:
+			DDRD = Copy_u8Value;
+  c2:	61 bb       	out	0x11, r22	; 17
+			break;
+		}
+		Local_enuErrorState = ES_OK;
+  c4:	81 e0       	ldi	r24, 0x01	; 1
+			case DIO_PORTC:
+			DDRC = Copy_u8Value;
+			break;
+			case DIO_PORTD:
+			DDRD = Copy_u8Value;
+			break;
+  c6:	08 95       	ret
+		}
+		Local_enuErrorState = ES_OK;
+		} else {
+		Local_enuErrorState = ES_OUT_OF_RANGE;
+  c8:	82 e0       	ldi	r24, 0x02	; 2
+  ca:	08 95       	ret
+			break;
+			case DIO_PORTD:
+			DDRD = Copy_u8Value;
+			break;
+		}
+		Local_enuErrorState = ES_OK;
+  cc:	81 e0       	ldi	r24, 0x01	; 1
+		} else {
+		Local_enuErrorState = ES_OUT_OF_RANGE;
+	}
+
+	return Local_enuErrorState;
+}
+  ce:	08 95       	ret
+
+000000d0 <DIO_enuSetPortValue>:
+
+ES_t DIO_enuSetPortValue(u8 Copy_u8PortID, u8 Copy_u8Value) {
+	ES_t Local_enuErrorState = ES_NOTOK;
+	if (Copy_u8PortID <= DIO_PORTD) {
+  d0:	84 30       	cpi	r24, 0x04	; 4
+  d2:	a0 f4       	brcc	.+40     	; 0xfc <DIO_enuSetPortValue+0x2c>
+		switch (Copy_u8PortID) {
+  d4:	81 30       	cpi	r24, 0x01	; 1
+  d6:	49 f0       	breq	.+18     	; 0xea <DIO_enuSetPortValue+0x1a>
+  d8:	28 f0       	brcs	.+10     	; 0xe4 <DIO_enuSetPortValue+0x14>
+  da:	82 30       	cpi	r24, 0x02	; 2
+  dc:	49 f0       	breq	.+18     	; 0xf0 <DIO_enuSetPortValue+0x20>
+  de:	83 30       	cpi	r24, 0x03	; 3
+  e0:	51 f0       	breq	.+20     	; 0xf6 <DIO_enuSetPortValue+0x26>
+  e2:	0e c0       	rjmp	.+28     	; 0x100 <DIO_enuSetPortValue+0x30>
+			case DIO_PORTA:
+			PORTA = Copy_u8Value;
+  e4:	6b bb       	out	0x1b, r22	; 27
+			break;
+			case DIO_PORTD:
+			PORTD = Copy_u8Value;
+			break;
+		}
+		Local_enuErrorState = ES_OK;
+  e6:	81 e0       	ldi	r24, 0x01	; 1
+	ES_t Local_enuErrorState = ES_NOTOK;
+	if (Copy_u8PortID <= DIO_PORTD) {
+		switch (Copy_u8PortID) {
+			case DIO_PORTA:
+			PORTA = Copy_u8Value;
+			break;
+  e8:	08 95       	ret
+			case DIO_PORTB:
+			PORTB = Copy_u8Value;
+  ea:	68 bb       	out	0x18, r22	; 24
+			break;
+			case DIO_PORTD:
+			PORTD = Copy_u8Value;
+			break;
+		}
+		Local_enuErrorState = ES_OK;
+  ec:	81 e0       	ldi	r24, 0x01	; 1
+			case DIO_PORTA:
+			PORTA = Copy_u8Value;
+			break;
+			case DIO_PORTB:
+			PORTB = Copy_u8Value;
+			break;
+  ee:	08 95       	ret
+			case DIO_PORTC:
+			PORTC = Copy_u8Value;
+  f0:	65 bb       	out	0x15, r22	; 21
+			break;
+			case DIO_PORTD:
+			PORTD = Copy_u8Value;
+			break;
+		}
+		Local_enuErrorState = ES_OK;
+  f2:	81 e0       	ldi	r24, 0x01	; 1
+			case DIO_PORTB:
+			PORTB = Copy_u8Value;
+			break;
+			case DIO_PORTC:
+			PORTC = Copy_u8Value;
+			break;
+  f4:	08 95       	ret
+			case DIO_PORTD:
+			PORTD = Copy_u8Value;
+  f6:	62 bb       	out	0x12, r22	; 18
+			break;
+		}
+		Local_enuErrorState = ES_OK;
+  f8:	81 e0       	ldi	r24, 0x01	; 1
+			case DIO_PORTC:
+			PORTC = Copy_u8Value;
+			break;
+			case DIO_PORTD:
+			PORTD = Copy_u8Value;
+			break;
+  fa:	08 95       	ret
+		}
+		Local_enuErrorState = ES_OK;
+		} else {
+		Local_enuErrorState = ES_OUT_OF_RANGE;
+  fc:	82 e0       	ldi	r24, 0x02	; 2
+  fe:	08 95       	ret
+			break;
+			case DIO_PORTD:
+			PORTD = Copy_u8Value;
+			break;
+		}
+		Local_enuErrorState = ES_OK;
+ 100:	81 e0       	ldi	r24, 0x01	; 1
+		} else {
+		Local_enuErrorState = ES_OUT_OF_RANGE;
+	}
+	return Local_enuErrorState;
+}
+ 102:	08 95       	ret
+
+00000104 <main>:
+#include "STD_TYPES.h"
+#include "DIO_int.h"
+#include "errorState.h"
+#include <util/delay.h>
+
+int main() {
+ 104:	cf 93       	push	r28
+ 106:	df 93       	push	r29
+ 108:	cd b7       	in	r28, 0x3d	; 61
+ 10a:	de b7       	in	r29, 0x3e	; 62
+ 10c:	2a 97       	sbiw	r28, 0x0a	; 10
+ 10e:	0f b6       	in	r0, 0x3f	; 63
+ 110:	f8 94       	cli
+ 112:	de bf       	out	0x3e, r29	; 62
+ 114:	0f be       	out	0x3f, r0	; 63
+ 116:	cd bf       	out	0x3d, r28	; 61
+	u8 segCthd[] =
+ 118:	8a e0       	ldi	r24, 0x0A	; 10
+ 11a:	e0 e6       	ldi	r30, 0x60	; 96
+ 11c:	f0 e0       	ldi	r31, 0x00	; 0
+ 11e:	de 01       	movw	r26, r28
+ 120:	11 96       	adiw	r26, 0x01	; 1
+ 122:	01 90       	ld	r0, Z+
+ 124:	0d 92       	st	X+, r0
+ 126:	8a 95       	dec	r24
+ 128:	e1 f7       	brne	.-8      	; 0x122 <main+0x1e>
+	{ 0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f }, i,j;
+		u8 snack[]={0x01,0x02,0x04,0x08,0x10,0x20};
+	DIO_enuInit();
+ 12a:	0e 94 41 00 	call	0x82	; 0x82 <DIO_enuInit>
+
+	while (1) {
+		for (i=0;i<10;i++)
+ 12e:	00 e0       	ldi	r16, 0x00	; 0
+ 130:	27 c0       	rjmp	.+78     	; 0x180 <main+0x7c>
+		{
+			DIO_enuSetPortValue(DIO_u8PORTA,segCthd[i]);
+ 132:	e1 e0       	ldi	r30, 0x01	; 1
+ 134:	f0 e0       	ldi	r31, 0x00	; 0
+ 136:	ec 0f       	add	r30, r28
+ 138:	fd 1f       	adc	r31, r29
+ 13a:	e0 0f       	add	r30, r16
+ 13c:	f1 1d       	adc	r31, r1
+ 13e:	60 81       	ld	r22, Z
+ 140:	80 e0       	ldi	r24, 0x00	; 0
+ 142:	0e 94 68 00 	call	0xd0	; 0xd0 <DIO_enuSetPortValue>
+			for(j=0;j<10;j++)
+ 146:	10 e0       	ldi	r17, 0x00	; 0
+ 148:	18 c0       	rjmp	.+48     	; 0x17a <main+0x76>
+			{
+				DIO_enuSetPortDirection(DIO_u8PORTD,0xff);
+ 14a:	6f ef       	ldi	r22, 0xFF	; 255
+ 14c:	83 e0       	ldi	r24, 0x03	; 3
+ 14e:	0e 94 4e 00 	call	0x9c	; 0x9c <DIO_enuSetPortDirection>
+				DIO_enuSetPortValue(DIO_u8PORTD,segCthd[j]);
+ 152:	e1 e0       	ldi	r30, 0x01	; 1
+ 154:	f0 e0       	ldi	r31, 0x00	; 0
+ 156:	ec 0f       	add	r30, r28
+ 158:	fd 1f       	adc	r31, r29
+ 15a:	e1 0f       	add	r30, r17
+ 15c:	f1 1d       	adc	r31, r1
+ 15e:	60 81       	ld	r22, Z
+ 160:	83 e0       	ldi	r24, 0x03	; 3
+ 162:	0e 94 68 00 	call	0xd0	; 0xd0 <DIO_enuSetPortValue>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 166:	2f e9       	ldi	r18, 0x9F	; 159
+ 168:	86 e8       	ldi	r24, 0x86	; 134
+ 16a:	91 e0       	ldi	r25, 0x01	; 1
+ 16c:	21 50       	subi	r18, 0x01	; 1
+ 16e:	80 40       	sbci	r24, 0x00	; 0
+ 170:	90 40       	sbci	r25, 0x00	; 0
+ 172:	e1 f7       	brne	.-8      	; 0x16c <main+0x68>
+ 174:	00 c0       	rjmp	.+0      	; 0x176 <main+0x72>
+ 176:	00 00       	nop
+
+	while (1) {
+		for (i=0;i<10;i++)
+		{
+			DIO_enuSetPortValue(DIO_u8PORTA,segCthd[i]);
+			for(j=0;j<10;j++)
+ 178:	1f 5f       	subi	r17, 0xFF	; 255
+ 17a:	1a 30       	cpi	r17, 0x0A	; 10
+ 17c:	30 f3       	brcs	.-52     	; 0x14a <main+0x46>
+	{ 0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f }, i,j;
+		u8 snack[]={0x01,0x02,0x04,0x08,0x10,0x20};
+	DIO_enuInit();
+
+	while (1) {
+		for (i=0;i<10;i++)
+ 17e:	0f 5f       	subi	r16, 0xFF	; 255
+ 180:	0a 30       	cpi	r16, 0x0A	; 10
+ 182:	b8 f2       	brcs	.-82     	; 0x132 <main+0x2e>
+ 184:	d4 cf       	rjmp	.-88     	; 0x12e <main+0x2a>
+
+00000186 <_exit>:
+ 186:	f8 94       	cli
+
+00000188 <__stop_program>:
+ 188:	ff cf       	rjmp	.-2      	; 0x188 <__stop_program>
