@@ -34,6 +34,7 @@ typedef enum  {
        CHANNEL_7
    }ADC_Channel;
 void ADC_int(ADC_vref volt,ADC_Prescaler prescaler);
-u16 ADC_read(ADC_Channel channel);
+
+u16 ADC_getValue(ADC_Channel channel);
 
 #endif /* ADC_INT_H_ */
